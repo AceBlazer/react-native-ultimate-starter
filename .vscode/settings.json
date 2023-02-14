@@ -1,0 +1,11 @@
+{
+    "java.compile.nullAnalysis.mode": "disabled",
+    "cSpell.words": [
+        "APISAUCE",
+        "ENVFILE",
+        "gradlew",
+        "Middlewares",
+        "persistor"
+    ],
+    "java.configuration.updateBuildConfiguration": "disabled"
+}
