@@ -1,4 +1,4 @@
-import {ActionReducerMapBuilder, PayloadAction} from '@reduxjs/toolkit';
+import {ActionReducerMapBuilder} from '@reduxjs/toolkit';
 import fetchReducer from './extraReducers/fetch.reducer';
 
 export type SettingsState = {
@@ -16,7 +16,7 @@ const initialState: SettingsState = {
 const settings = {
   initialState,
   reducers: {
-    reset: (state: SettingsState, action: PayloadAction<unknown>) => {
+    settingsReset: () => {
       return initialState;
     },
   },

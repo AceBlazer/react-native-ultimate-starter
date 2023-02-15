@@ -1,11 +1,10 @@
 import {combineReducers} from 'redux';
 import {configureStore} from '@reduxjs/toolkit';
-import {createSlices} from './slices';
+import {createSlices, slicesArray} from './slices';
 import getMiddlewaresArray from './middlewares';
 import {createTransform, persistStore, persistReducer} from 'redux-persist';
-import {migrations} from './migrations';
+import {migrations} from './persist/migrations';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {slicesArray} from './defaultStoreData';
 import omit from 'lodash/omit';
 import initSubscriber from 'redux-subscriber';
 import config from '../config';
@@ -63,7 +62,7 @@ const configurePosteStore = ({
     key: 'entities',
     storage: _storage,
     transforms: [blacklistTransform],
-    version: 0,
+    // version: 0,
     migrate: migrations,
   };
 
@@ -90,7 +89,7 @@ const configurePosteStore = ({
 };
 
 const createStore = () => {
-  const appsSlices = createSlices(slicesArray);
+  const appsSlices = createSlices();
   const reducer = createReducer(appsSlices, combineReducers);
   const slices = appsSlices;
 

@@ -8,6 +8,7 @@ import config from '../../config';
 import services from '../../services';
 import {useAppSelector} from '../../store';
 import {PostResponse, PostsResponse} from '../../types/settings.type';
+import {postsSelector} from '../../store/selectors/settings.selectors';
 
 interface IApplicationProps {}
 
@@ -15,9 +16,7 @@ export default function Application({}: PropsWithChildren<IApplicationProps>) {
   const {t} = useTranslation();
   const {colors} = useTheme();
 
-  const posts = useAppSelector<PostsResponse>(
-    store => store.entities.settings.data,
-  );
+  const posts = useAppSelector<PostsResponse>(postsSelector);
 
   useEffect(() => {
     if (posts.length === 0) {
@@ -27,6 +26,7 @@ export default function Application({}: PropsWithChildren<IApplicationProps>) {
 
   return (
     <View style={[styles.container]}>
+      {/* the below jsx is used for debugging purposes, to be removed */}
       <View style={styles.body}>
         <Text style={[styles.text, {color: colors.text}]}>
           {t('test.hello')}
@@ -43,6 +43,7 @@ export default function Application({}: PropsWithChildren<IApplicationProps>) {
             </View>
           ))}
       </View>
+      {/* end of to be removed */}
       <OfflineNotice />
     </View>
   );

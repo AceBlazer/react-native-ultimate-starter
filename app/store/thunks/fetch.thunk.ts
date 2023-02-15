@@ -1,11 +1,13 @@
 //@ts-ignore
 import {AsyncThunk, createAsyncThunk, RejectWithValue} from '@reduxjs/toolkit';
+import {BaseThunkAPI} from '@reduxjs/toolkit/dist/createAsyncThunk';
 import {AxiosResponse} from 'axios';
+import {RootState} from '..';
 import {httpProvider} from '../../config';
 import {RequestArgs} from '../../types/http.type';
 
 /**
- * !this should be dispatched only by services
+ * !this should be dispatched only from services
  */
 
 /**
@@ -21,15 +23,18 @@ export const fetchData = <R>(): AsyncThunk<
     'thunk/config/fetchData',
     async (
       args: RequestArgs,
-      {rejectWithValue}: {rejectWithValue: RejectWithValue},
+      {rejectWithValue}: BaseThunkAPI<RootState, any, any, any>,
     ) => {
       try {
         if (args.url.length === 0) {
-          rejectWithValue('fetchData thunk error: url is empty');
+          throw new Error('fetchData thunk error: url is empty');
         }
-        return await httpProvider.sendHttpRequest<R>(args);
+        const responseData = await httpProvider.sendHttpRequest<R>(args);
+        return responseData;
       } catch (error: any) {
-        rejectWithValue(error?.message ?? 'fetchData thunk unknown error');
+        return rejectWithValue(
+          error?.message ?? 'fetchData thunk unknown error',
+        );
       }
     },
   );

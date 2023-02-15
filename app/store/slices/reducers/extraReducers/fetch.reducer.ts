@@ -15,7 +15,8 @@ const fetchReducer = (builder: ActionReducerMapBuilder<Partial<RootState>>) => {
   });
   builder.addCase(fetchData().rejected, (state, action) => {
     state.loading = false;
-    state.error = action.error;
+    //@ts-ignore
+    state.error = action.error.message;
   });
 };
 

@@ -15,7 +15,7 @@ const sliceCreator = (
   });
 };
 
-export const createSlices = (slicesArray: string[]) => {
+export const createSlices = (): any => {
   return slicesArray.reduce((acc: object, sliceName: string) => {
     const elementSlice = sliceCreator(sliceName, createSlice, slicesReducers);
     //@ts-ignore
@@ -23,3 +23,5 @@ export const createSlices = (slicesArray: string[]) => {
     return acc;
   }, {});
 };
+
+export const slicesArray: Array<string> = Object.keys(slicesReducers);
