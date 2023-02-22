@@ -9,6 +9,8 @@ import services from '../../services';
 import {useAppSelector} from '../../store';
 import {PostResponse, PostsResponse} from '../../types/settings.type';
 import {postsSelector} from '../../store/selectors/settings.selectors';
+import {appLogger} from '../../services/logger/logger.service';
+import {LOGGER_LEVELS} from '../../config/logger';
 
 interface IApplicationProps {}
 
@@ -19,6 +21,8 @@ export default function Application({}: PropsWithChildren<IApplicationProps>) {
   const posts = useAppSelector<PostsResponse>(postsSelector);
 
   useEffect(() => {
+    appLogger.info(LOGGER_LEVELS.SETTINGS, 'this is a test log');
+
     if (posts.length === 0) {
       services.settings.fetchPosts();
     }

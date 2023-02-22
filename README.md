@@ -21,14 +21,17 @@ done:
 
 -----------todo--------------
 
-fix <UNDEFINED> actions in redux debugger
-
 logger per api / per user implicit
 
 performance network + overall (make it implicit: no need to add it by devs instead inside logger,
 logging network in interceptor and inside services)
 
-rollback transaction (redux-undo)
+*** rollback transaction (redux-undo) used as example in settings slice to undo store changes when request fails
+problem: undo b4 reject bcause its done in middleware
+
+fix http service old files get,post,put...
+
+add axios cache (refer to picture downloaded from linkedin)
 
 ----------to learn------------
 react router dom v6

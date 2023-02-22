@@ -16,7 +16,7 @@ const initialState: SettingsState = {
 const settings = {
   initialState,
   reducers: {
-    settingsReset: () => {
+    reset: () => {
       return initialState;
     },
   },

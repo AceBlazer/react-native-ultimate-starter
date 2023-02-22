@@ -1,24 +1,25 @@
-import {useNetInfo} from '@react-native-community/netinfo';
-import React, {useEffect, useState} from 'react';
+import {NetInfoState, useNetInfo} from '@react-native-community/netinfo';
+import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import useTheme from '../../../hooks/config/useTheme';
+import {useAppDispatch, useAppSelector} from '../../../store';
+import {connectivitySelector} from '../../../store/selectors/connectivity.selectors';
+import {updateConnectivity} from '../../../store/slices/actions/connectivity.actions';
 
 const OfflineNotice = () => {
   const netInfo = useNetInfo();
-  const [offline, setOffline] = useState(false);
   const {colors} = useTheme();
+  const dispatch = useAppDispatch();
+
+  const connectivity = useAppSelector<NetInfoState>(connectivitySelector);
 
   useEffect(() => {
-    if (netInfo.isConnected === false) {
-      setOffline(true);
-      return;
-    }
-    if (offline) {
-      setOffline(false);
+    if (netInfo.isConnected !== null) {
+      dispatch(updateConnectivity(netInfo));
     }
   }, [netInfo.isConnected]);
 
-  if (offline) {
+  if (!(connectivity.isConnected && connectivity.isInternetReachable)) {
     return (
       <View style={(styles.container, {backgroundColor: colors.danger})} />
     );

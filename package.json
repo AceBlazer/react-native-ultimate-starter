@@ -29,6 +29,7 @@
     "react-i18next": "^12.1.4",
     "react-native": "0.71.1",
     "react-native-config": "^1.5.0",
+    "react-native-logs": "^5.0.1",
     "react-native-vector-icons": "^9.2.0",
     "react-redux": "^8.0.5",
     "redux-persist": "^6.0.0",

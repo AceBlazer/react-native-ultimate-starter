@@ -28,7 +28,7 @@ const global = {
     ) => {
       return {...state, error: action.payload};
     },
-    globalReset: () => {
+    reset: () => {
       return initialState;
     },
   },

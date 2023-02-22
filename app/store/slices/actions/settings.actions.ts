@@ -11,12 +11,24 @@ import {defaultStore} from '../..';
  * which makes it easier to get get actions from reducer definition
  */
 
-const {settingsReset} = defaultStore.slices.settings.actions;
+const {reset} = defaultStore.slices.settings.actions;
 
-const resetSettings = () => {
+const undoSettings = () => {
   return {
-    type: settingsReset,
+    type: 'settings/undo',
   };
 };
 
-export {resetSettings};
+const redoSettings = () => {
+  return {
+    type: 'settings/redo',
+  };
+};
+
+const resetSettings = () => {
+  return {
+    type: reset,
+  };
+};
+
+export {undoSettings, redoSettings, resetSettings};

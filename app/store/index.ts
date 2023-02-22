@@ -3,21 +3,31 @@ import {configureStore} from '@reduxjs/toolkit';
 import {createSlices, slicesArray} from './slices';
 import getMiddlewaresArray from './middlewares';
 import {createTransform, persistStore, persistReducer} from 'redux-persist';
-import {migrations} from './persist/migrations';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import omit from 'lodash/omit';
 import initSubscriber from 'redux-subscriber';
 import config from '../config';
-import BLACKLIST from './persist';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
+import undoable from 'redux-undo';
+import {BLACKLIST, MIGRATIONS} from './constants/persist';
+import {UNDOABLE_SLICES} from './constants/undo';
 
 const ENABLE_PERSIST = config.enableReduxPersist;
 
-const createSlicesReducers = (slices: object, _combineReducers: Function) => {
-  let slicesReducers = {};
+const createSlicesReducers = (
+  slices: {[key: string]: any},
+  _combineReducers: Function,
+) => {
+  let slicesReducers: {[key: string]: any} = {};
   Object.keys(slices).map(slice => {
-    //@ts-ignore
-    slicesReducers[slices[slice].name] = slices[slice].reducer;
+    const sliceName: string = slices[slice].name;
+    const sliceReducer = slices[slice].reducer;
+
+    slicesReducers[sliceName] = UNDOABLE_SLICES.has(sliceName)
+      ? undoable(sliceReducer, {
+          ...UNDOABLE_SLICES.get(sliceName),
+        })
+      : sliceReducer;
   });
   return _combineReducers(slicesReducers);
 };
@@ -63,7 +73,7 @@ const configurePosteStore = ({
     storage: _storage,
     transforms: [blacklistTransform],
     // version: 0,
-    migrate: migrations,
+    migrate: MIGRATIONS,
   };
 
   const persistedReducer = ENABLE_PERSIST

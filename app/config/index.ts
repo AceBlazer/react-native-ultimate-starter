@@ -21,11 +21,12 @@ const testModeEnabled = false; //true => show component in test screen
 const baseURL = baseURLs[REACT_APP_ENVIRONMENT];
 const httpTimeout = 30000; //timeout in ms
 const enablePerformance = false; //enable log performance in ms
-const enableReduxPersist = true; //true => enable REDUX persists
+const enableReduxPersist = false; //true => enable REDUX persists
 const defaultTheme: keyof typeof colors = 'dark';
 const defaultLanguage: keyof typeof resources = 'ar';
 const httpProvider: HttpProvider = axiosProvider; //axios, apisauce...
 const appEnv = REACT_APP_ENVIRONMENT; //environment, used to condition cases to only work on dev
+const showConsoleLogs = true;
 
 export default {
   testModeEnabled,
@@ -37,6 +38,7 @@ export default {
   baseURL,
   httpTimeout,
   appEnv,
+  showConsoleLogs,
 };
 
 export {baseURL, httpTimeout, httpProvider};

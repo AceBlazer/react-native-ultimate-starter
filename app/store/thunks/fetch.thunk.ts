@@ -20,7 +20,7 @@ export const fetchData = <R>(): AsyncThunk<
   any
 > =>
   createAsyncThunk(
-    'thunk/config/fetchData',
+    'thunk/fetchData',
     async (
       args: RequestArgs,
       {rejectWithValue}: BaseThunkAPI<RootState, any, any, any>,

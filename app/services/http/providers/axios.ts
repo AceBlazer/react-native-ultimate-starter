@@ -3,9 +3,8 @@
 // } from 'axios';
 import {NetworkError, SessionExpiredError} from '../exceptions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {NetworkStatus} from '../utils/networkStatus';
 import {isJwtExpired} from 'jwt-check-expiration';
-import {AxiosNetworkResponse, AxiosType} from '../../../types/axios.type';
+import {AxiosNetworkResponse} from '../../../types/axios.type';
 import {UserResponse} from '../../../types/auth.type';
 import {API} from '../../../constants/endpoints';
 import appAxios from './appAxios';
@@ -14,13 +13,12 @@ import {
   RequestArgs,
   StorageTokens,
 } from '../../../types/http.type';
+import {defaultStore} from '../../../store';
 // import {HttpProvider} from '../../../types/http.type';
 
 //TODO: use performance in start and end comments
 
 function axiosProvider(): HttpProvider {
-  const networkStatus = new NetworkStatus();
-
   const getAuthTokens = async (): Promise<StorageTokens> => {
     const [token, refreshToken] = await Promise.all([
       AsyncStorage.getItem('token'),
@@ -115,7 +113,7 @@ function axiosProvider(): HttpProvider {
 
         if (res.data) {
           return resolve(
-            handleRequestSuccess<T>(args, res.data.statusCode, res.data),
+            handleRequestSuccess<T>(args, res.data.statusCode, res.data as T),
           );
         }
         reject('no data object in response');
@@ -135,7 +133,9 @@ function axiosProvider(): HttpProvider {
 
   const sendHttpRequest = <T>(args: RequestArgs): Promise<T> => {
     return new Promise<T>(async (resolve, reject) => {
-      if (!networkStatus.isConnectionAvailable()) {
+      return reject(new NetworkError());
+      const networkStatus = defaultStore.store.getState().entities.connectivity;
+      if (!(networkStatus.isConnected && networkStatus.isInternetReachable)) {
         return reject(new NetworkError());
       }
 
