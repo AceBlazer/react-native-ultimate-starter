@@ -1,4 +1,5 @@
-import services from '..';
+import config from '..';
+import services from '../../services/';
 
 export const LOGGER_OPTIONS = {
   ERROR: 'error',
@@ -6,16 +7,21 @@ export const LOGGER_OPTIONS = {
   INFO: 'info',
   DEBUG: 'debug',
 };
-const ACTIVE_CHANNEL = LOGGER_OPTIONS.DEBUG;
 
-export const LOGGER_LEVELS: {[key: string]: string} = Object.keys(
-  services,
-).reduce(
-  (prev, curr) => ({
-    ...prev,
+const ACTIVE_CHANNEL =
+  config.appEnv === 'production' ? LOGGER_OPTIONS.INFO : LOGGER_OPTIONS.DEBUG;
+
+type UppercaseKeys<T> = {[K in keyof T as Uppercase<string & K>]: T[K]};
+type LoggerLevels = UppercaseKeys<{[K in keyof typeof services]: string}>;
+const defaultServiceKey = Object.keys(services)[0] as keyof typeof services;
+export const LOGGER_LEVELS: LoggerLevels = Object.keys(services).reduce(
+  (acc, curr) => ({
+    ...acc,
     [curr.toUpperCase()]: curr,
   }),
-  {},
+  {
+    [defaultServiceKey.toUpperCase()]: services[defaultServiceKey],
+  } as LoggerLevels,
 );
 
 export function getIfLogAllowed(name: string) {
@@ -50,5 +56,6 @@ export function getIfLogAllowed(name: string) {
 
 export const LEVEL = [
   LOGGER_LEVELS.SETTINGS,
+  LOGGER_LEVELS.AXIOS,
   // '*', to allow all levels
 ];

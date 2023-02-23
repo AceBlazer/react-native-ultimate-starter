@@ -4,8 +4,11 @@
         "APISAUCE",
         "ENVFILE",
         "gradlew",
+        "icomoon",
+        "JASSER",
         "Middlewares",
         "persistor",
+        "sourcemaps",
         "undoable"
     ],
     "java.configuration.updateBuildConfiguration": "disabled"

@@ -1,4 +1,4 @@
-import React, {JSXElementConstructor, useEffect} from 'react';
+import React, {JSXElementConstructor} from 'react';
 import * as Sentry from '@sentry/react-native';
 import {SENTRY_CONFIG} from './app/config/sentry';
 import CombineProviders from './app/helpers/CombineProviders';
@@ -27,18 +27,11 @@ function App(): JSX.Element {
         loading: null,
         persistor: defaultStore.persistor,
       };
-
       appProviders.push(PersistGate);
     }
   };
 
-  const initApp = () => {};
-
   initProviders();
-
-  useEffect(() => {
-    initApp();
-  }, []);
 
   return (
     <CombineProviders providers={appProviders}>

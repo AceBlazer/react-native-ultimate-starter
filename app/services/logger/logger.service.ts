@@ -5,32 +5,42 @@ import {
 } from 'react-native-logs';
 import AppConfig from '../../config/';
 import {getIfLogAllowed, LEVEL, LOGGER_OPTIONS} from '../../config/logger';
+import connectedUser from '../../singletons/user/user.singleton';
 // import {getLogger} from '../socket/loggerInterceptor'; in case we need to send logs to backend
 
 const customTransport: transportFunctionType = ({level, rawMsg}) => {
-  if (getIfLogAllowed(level.text)) {
-    const showLogs = AppConfig.showConsoleLogs;
-    if (!showLogs) {
-      return;
-    }
-
-    if (level.text === LOGGER_OPTIONS.ERROR) {
-      console.error('[' + logDate() + ']', rawMsg[0].text, rawMsg[0].message);
-    } else if (level.text === LOGGER_OPTIONS.WARN) {
-      console.warn('[' + logDate() + ']', rawMsg[0].text, rawMsg[0].message);
-    } else {
-      console.log('[' + logDate() + ']', rawMsg[0].text, rawMsg[0].message);
-    }
-
-    // const {text: api = '', message = ''} = rawMsg[0];
-    // const {text: loglevel = ''} = level;
-    // const logPayload = {
-    //   _api: api.split(' | '),
-    //   level: loglevel,
-    //   message,
-    // };
-    // getLogger().userSockets.get('userLogs')?.emit('sendLog', logPayload);
+  if (!getIfLogAllowed(level.text)) {
+    return;
   }
+
+  const showLogs = AppConfig.showConsoleLogs;
+  if (!showLogs) {
+    return;
+  }
+
+  const toBeLogged = [
+    '[' + logDate() + ']',
+    rawMsg[0].text,
+    rawMsg[0].message,
+    extra(),
+  ];
+
+  if (level.text === LOGGER_OPTIONS.ERROR) {
+    console.error(...toBeLogged);
+  } else if (level.text === LOGGER_OPTIONS.WARN) {
+    console.warn(...toBeLogged);
+  } else {
+    console.log(...toBeLogged);
+  }
+
+  // const {text: api = '', message = ''} = rawMsg[0];
+  // const {text: loglevel = ''} = level;
+  // const logPayload = {
+  //   _api: api.split(' | '),
+  //   level: loglevel,
+  //   message,
+  // };
+  // getLogger().userSockets.get('userLogs')?.emit('sendLog', logPayload);
 };
 
 const config: configLoggerType = {
@@ -56,6 +66,15 @@ function logDate() {
   return display;
 }
 
+function extra() {
+  try {
+    const {loginID} = connectedUser.getUserInfo();
+    return `| user: ${loginID}`;
+  } catch (error) {
+    return '';
+  }
+}
+
 const extractArgs = (args: Array<any>) => {
   const message = args[args.length - 1];
   let text = '|';
@@ -75,24 +94,25 @@ const allowedLevel = (args: Array<any>) => {
 };
 
 export const appLogger = {
-  error: (...args: Array<any>) => {
-    if (allowedLevel(args)) {
-      generalLogger.error(extractArgs(args));
+  api: (apiArg: string) => {
+    console.log('apiArg ', apiArg);
+    if (!allowedLevel([apiArg])) {
+      return {
+        error: () => {},
+        debug: () => {},
+        info: () => {},
+        warn: () => {},
+      };
     }
+    return {
+      error: appLogger.error,
+      debug: appLogger.debug,
+      info: appLogger.info,
+      warn: appLogger.info,
+    };
   },
-  debug: (...args: Array<any>) => {
-    if (allowedLevel(args)) {
-      generalLogger.debug(extractArgs(args));
-    }
-  },
-  info: (...args: Array<any>) => {
-    if (allowedLevel(args)) {
-      generalLogger.info(extractArgs(args));
-    }
-  },
-  warn: (...args: Array<any>) => {
-    if (allowedLevel(args)) {
-      generalLogger.warn(extractArgs(args));
-    }
-  },
+  error: (...args: Array<any>) => generalLogger.error(extractArgs(args)),
+  debug: (...args: Array<any>) => generalLogger.debug(extractArgs(args)),
+  info: (...args: Array<any>) => generalLogger.info(extractArgs(args)),
+  warn: (...args: Array<any>) => generalLogger.warn(extractArgs(args)),
 };

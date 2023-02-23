@@ -133,13 +133,10 @@ function axiosProvider(): HttpProvider {
 
   const sendHttpRequest = <T>(args: RequestArgs): Promise<T> => {
     return new Promise<T>(async (resolve, reject) => {
-      return reject(new NetworkError());
       const networkStatus = defaultStore.store.getState().entities.connectivity;
       if (!(networkStatus.isConnected && networkStatus.isInternetReachable)) {
         return reject(new NetworkError());
       }
-
-      //start
 
       const authTokens = await getAuthTokens();
       const isAuthenticated = authTokens.token && authTokens.refreshToken;

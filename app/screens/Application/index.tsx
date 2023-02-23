@@ -11,6 +11,8 @@ import {PostResponse, PostsResponse} from '../../types/settings.type';
 import {postsSelector} from '../../store/selectors/settings.selectors';
 import {appLogger} from '../../services/logger/logger.service';
 import {LOGGER_LEVELS} from '../../config/logger';
+import connectedUser from '../../singletons/user/user.singleton';
+import {UserInfo} from '../../types/user.type';
 
 interface IApplicationProps {}
 
@@ -21,8 +23,20 @@ export default function Application({}: PropsWithChildren<IApplicationProps>) {
   const posts = useAppSelector<PostsResponse>(postsSelector);
 
   useEffect(() => {
-    appLogger.info(LOGGER_LEVELS.SETTINGS, 'this is a test log');
+    //simulating user login
+    const userInfo: UserInfo = {
+      loginID: 'aceBlazer',
+      userID: 'JASSER',
+    };
+    connectedUser.setUserInfo(userInfo);
 
+    //testing logger
+    appLogger.debug('this is a test debug log');
+    appLogger
+      .api(LOGGER_LEVELS.SETTINGS)
+      .info('this is a test info log for api: SETTINGS');
+
+    //testing service
     if (posts.length === 0) {
       services.settings.fetchPosts();
     }

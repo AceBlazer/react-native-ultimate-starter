@@ -2,6 +2,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NetworkError} from '../exceptions';
 import {baseURL, httpTimeout} from '../../../config';
+import {LOGGER_LEVELS} from '../../../config/logger';
+import {appLogger} from '../../logger/logger.service';
 
 const appAxios = axios.create({
   baseURL: baseURL,
@@ -10,6 +12,8 @@ const appAxios = axios.create({
 
 appAxios.interceptors.request.use(
   async _config => {
+    appLogger.api(LOGGER_LEVELS.AXIOS).info('axios request started', _config);
+
     const token = await AsyncStorage.getItem('token');
     if (token) {
       _config.headers.Authorization = 'Bearer ' + token;
@@ -17,15 +21,22 @@ appAxios.interceptors.request.use(
     return _config;
   },
   error => {
+    appLogger
+      .api(LOGGER_LEVELS.AXIOS)
+      .error('axios request ended with error', error.message, error);
     return Promise.reject(error);
   },
 );
 
 appAxios.interceptors.response.use(
   response => {
+    appLogger.api(LOGGER_LEVELS.AXIOS).info('axios response ended', response);
     return response;
   },
   async error => {
+    appLogger
+      .api(LOGGER_LEVELS.AXIOS)
+      .error('axios response ended with error', error.message, error);
     if (!error.response) {
       return Promise.reject(new NetworkError());
     }
