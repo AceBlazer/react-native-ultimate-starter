@@ -41,6 +41,8 @@ automatically include performance for "x" (exp. included in network elapsed time
 -performance should be implicit (inside transaction)
 
 
+-add cli
+
 -(if still have time) maybe add auth classic vs saml and 2fa and biometric validation (see nicehash) 
 
 ----------to learn------------
