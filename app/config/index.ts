@@ -20,7 +20,7 @@ const baseURLs = {
 const testModeEnabled = false; //true => show component in test screen
 const baseURL = baseURLs[REACT_APP_ENVIRONMENT];
 const httpTimeout = 30000; //timeout in ms
-const enablePerformance = false; //enable log performance in ms
+const enablePerformance = true; //enable log performance in seconds
 const enableReduxPersist = false; //true => enable REDUX persists
 const defaultTheme: keyof typeof colors = 'dark';
 const defaultLanguage: keyof typeof resources = 'ar';

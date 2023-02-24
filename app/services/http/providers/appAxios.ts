@@ -30,13 +30,13 @@ appAxios.interceptors.request.use(
 
 appAxios.interceptors.response.use(
   response => {
-    appLogger.api(LOGGER_LEVELS.AXIOS).info('axios response ended', response);
+    appLogger.api(LOGGER_LEVELS.AXIOS).info('axios request ended', response);
     return response;
   },
   async error => {
     appLogger
       .api(LOGGER_LEVELS.AXIOS)
-      .error('axios response ended with error', error.message, error);
+      .error('axios request ended with error', error.message, error);
     if (!error.response) {
       return Promise.reject(new NetworkError());
     }

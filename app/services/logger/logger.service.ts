@@ -6,6 +6,7 @@ import {
 import AppConfig from '../../config/';
 import {getIfLogAllowed, LEVEL, LOGGER_OPTIONS} from '../../config/logger';
 import connectedUser from '../../singletons/user/user.singleton';
+import APP_PERFORMANCE from '../performance/performance.service';
 // import {getLogger} from '../socket/loggerInterceptor'; in case we need to send logs to backend
 
 const customTransport: transportFunctionType = ({level, rawMsg}) => {
@@ -18,11 +19,15 @@ const customTransport: transportFunctionType = ({level, rawMsg}) => {
     return;
   }
 
+  if (rawMsg[0].text.includes('started')) {
+    APP_PERFORMANCE.mark(rawMsg[0].text.split('started')[0]).start();
+  }
+
   const toBeLogged = [
     '[' + logDate() + ']',
     rawMsg[0].text,
     rawMsg[0].message,
-    extra(),
+    extra(rawMsg[0].text),
   ];
 
   if (level.text === LOGGER_OPTIONS.ERROR) {
@@ -47,7 +52,7 @@ const config: configLoggerType = {
   transport: customTransport,
 };
 
-const generalLogger = logger.createLogger(config);
+const loggerInstance = logger.createLogger(config);
 
 function addZero(date: number, n: number) {
   return String(date).padStart(n, '0');
@@ -66,10 +71,17 @@ function logDate() {
   return display;
 }
 
-function extra() {
+function extra(text = '') {
   try {
     const {loginID} = connectedUser.getUserInfo();
-    return `| user: ${loginID}`;
+
+    const elapsedTime = text.includes('ended')
+      ? `| elapsedTime: ${APP_PERFORMANCE.mark(
+          text.split('ended')[0],
+        ).getDuration()}`
+      : '';
+
+    return `| user: ${loginID} ${elapsedTime}`;
   } catch (error) {
     return '';
   }
@@ -95,7 +107,6 @@ const allowedLevel = (args: Array<any>) => {
 
 export const appLogger = {
   api: (apiArg: string) => {
-    console.log('apiArg ', apiArg);
     if (!allowedLevel([apiArg])) {
       return {
         error: () => {},
@@ -111,8 +122,8 @@ export const appLogger = {
       warn: appLogger.info,
     };
   },
-  error: (...args: Array<any>) => generalLogger.error(extractArgs(args)),
-  debug: (...args: Array<any>) => generalLogger.debug(extractArgs(args)),
-  info: (...args: Array<any>) => generalLogger.info(extractArgs(args)),
-  warn: (...args: Array<any>) => generalLogger.warn(extractArgs(args)),
+  error: (...args: Array<any>) => loggerInstance.error(extractArgs(args)),
+  debug: (...args: Array<any>) => loggerInstance.debug(extractArgs(args)),
+  info: (...args: Array<any>) => loggerInstance.info(extractArgs(args)),
+  warn: (...args: Array<any>) => loggerInstance.warn(extractArgs(args)),
 };
