@@ -132,6 +132,13 @@ function axiosProvider(): HttpProvider {
   };
 
   const sendHttpRequest = <T>(args: RequestArgs): Promise<T> => {
+    const callerName = new Error().stack?.split('\n')[2].trim().split(' ')[1];
+    if (callerName !== 'HttpService.sendRequest') {
+      throw new Error(
+        'unauthorized caller, sendHttpRequest should be only called from HttpService',
+      );
+    }
+
     return new Promise<T>(async (resolve, reject) => {
       const networkStatus = defaultStore.store.getState().entities.connectivity;
       if (!(networkStatus.isConnected && networkStatus.isInternetReachable)) {
@@ -154,44 +161,6 @@ function axiosProvider(): HttpProvider {
       resolve(handleRequest(args));
     });
   };
-
-  /**
-   * public methods
-   */
-
-  // const get = (url: string, config: AxiosRequestConfig) =>
-  //   sendHttpRequest({
-  //     method: 'GET',
-  //     url,
-  //     headers: config.headers,
-  //     body: config.data,
-  //   });
-
-  // const post = (url: string, config: AxiosRequestConfig) =>
-  //   sendHttpRequest({
-  //     method: 'POST',
-  //     url,
-  //     headers: config.headers,
-  //     body: config.data,
-  //   });
-
-  // const put = (url: string, config: AxiosRequestConfig) =>
-  //   sendHttpRequest({
-  //     method: 'PUT',
-  //     url,
-  //     headers: config.headers,
-  //     body: config.data,
-  //   });
-
-  // const _delete = (url: string, config: AxiosRequestConfig) =>
-  //   sendHttpRequest({
-  //     method: 'DELETE',
-  //     url,
-  //     headers: config.headers,
-  //     body: config.data,
-  //   });
-
-  // return {get, post, put, delete: _delete};
 
   return {sendHttpRequest};
 }

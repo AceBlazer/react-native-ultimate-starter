@@ -3,7 +3,7 @@ import {AsyncThunk, createAsyncThunk, RejectWithValue} from '@reduxjs/toolkit';
 import {BaseThunkAPI} from '@reduxjs/toolkit/dist/createAsyncThunk';
 import {AxiosResponse} from 'axios';
 import {RootState} from '..';
-import {httpProvider} from '../../config';
+import httpInstance from '../../services/http';
 import {RequestArgs} from '../../types/http.type';
 
 /**
@@ -29,7 +29,12 @@ export const fetchData = <R>(): AsyncThunk<
         if (args.url.length === 0) {
           throw new Error('fetchData thunk error: url is empty');
         }
-        const responseData = await httpProvider.sendHttpRequest<R>(args);
+        /**
+         * const responseData = await httpProvider.sendHttpRequest<R>(args); //! this is illegal and rejects error (only call sendHttpRequest from httpInstance)
+         * httpInstance.setProvider //! this is illegal and rejects error (only call setProvider from httpInstance)
+         * */
+
+        const responseData = await httpInstance.sendRequest<R>(args);
         return responseData;
       } catch (error: any) {
         return rejectWithValue(

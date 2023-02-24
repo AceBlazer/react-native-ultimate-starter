@@ -8,4 +8,4 @@ function httpInstance() {
   return _http;
 }
 
-export default httpInstance;
+export default httpInstance();

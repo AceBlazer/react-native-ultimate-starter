@@ -29,9 +29,6 @@ automatically include performance for "x" (exp. included in network elapsed time
 
 -----------todo--------------
 
-
--fix http service old files get,post,put...
-
 -add axios cache (refer to picture downloaded from linkedin)
 
 -new pattern: service dispatches a transaction to store => middleware gets transaction from store and dispatches to thunk

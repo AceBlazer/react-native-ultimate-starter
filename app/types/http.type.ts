@@ -7,19 +7,14 @@ export type RequestArgs = {
   body?: any;
 };
 
+type HttpRequest = <R>(args: RequestArgs) => Promise<R> | undefined;
+
 export type HttpProvider = {
-  // get: (url: string, config: object) => Promise<unknown> | undefined;
-  // post: (url: string, config: object) => Promise<unknown> | undefined;
-  // put: (url: string, config: object) => Promise<unknown> | undefined;
-  // delete: (url: string, config: object) => Promise<unknown> | undefined;
-  sendHttpRequest: <R>(args: RequestArgs) => Promise<R> | undefined;
+  sendHttpRequest: HttpRequest;
 };
 
 export interface IHttpService {
-  get: (url: string, config: object) => Promise<unknown> | undefined;
-  post: (url: string, config: object) => Promise<unknown> | undefined;
-  put: (url: string, config: object) => Promise<unknown> | undefined;
-  delete: (url: string, config: object) => Promise<unknown> | undefined;
+  sendRequest: HttpRequest;
 }
 
 export type StorageTokens = {

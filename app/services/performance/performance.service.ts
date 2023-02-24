@@ -21,7 +21,7 @@ const APP_PERFORMANCE: APP_PERFORMANCE_TYPE = {
   },
   start() {
     try {
-      if (config.enablePerformance) {
+      if (!config.enablePerformance) {
         return;
       }
       this.marks[this.markName] = {
@@ -56,7 +56,7 @@ const APP_PERFORMANCE: APP_PERFORMANCE_TYPE = {
   },
   getDuration() {
     try {
-      if (config.enablePerformance) {
+      if (!config.enablePerformance) {
         return;
       }
       const mark = this.marks[this.markName];
