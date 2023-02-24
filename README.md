@@ -13,7 +13,7 @@ one source of truth: store) => ui uses selector (middlewares work in between)
 - sentry (couldn't add sourcemaps and multiple environments, only multiple releases)
 - i18n
 - theming with color schemes
-- network service DI, provider configurable with token&refresh interceptors and error handling
+- network service DI, provider configurable with token&refresh, cancel token, cache, interceptors and error handling
 - env vars (couldn't add inline custom var so added react_app_environment env var)
 - global loader: slice global, selector in app.js, middleware to detect loading then add it to global
 (couldn't configure from whom it gets loading, but rather from thunk itself). From ui, dispatch directly to global reducer
@@ -29,7 +29,12 @@ automatically include performance for "x" (exp. included in network elapsed time
 
 -----------todo--------------
 
--add axios cache (refer to picture downloaded from linkedin)
+
+-add axios cache 
+    config imports are undefined!!
+    add cache
+    catch timeout errors by axios and raise custom error
+
 
 -new pattern: service dispatches a transaction to store => middleware gets transaction from store and dispatches to thunk
 -logger should be implicit (if all gonna be passing by transaction reducer, we add logger there)

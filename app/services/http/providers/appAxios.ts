@@ -1,13 +1,22 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NetworkError} from '../exceptions';
-import {baseURL, httpTimeout} from '../../../config';
+// import {baseURL, httpTimeout, clientCacheDuration} from '../../../config';
 import {LOGGER_LEVELS} from '../../../config/logger';
 import {appLogger} from '../../logger/logger.service';
+import {setupCache} from 'axios-cache-adapter';
+import config from '../../../config';
+
+console.log('clientCacheDuration', config.clientCacheDuration);
+
+// const cache = setupCache({
+//   maxAge: clientCacheDuration,
+// });
 
 const appAxios = axios.create({
-  baseURL: baseURL,
-  timeout: httpTimeout,
+  // baseURL: baseURL,
+  // timeout: httpTimeout,
+  // adapter: clientCacheDuration ? cache.adapter : axios.defaults.adapter,
 });
 
 appAxios.interceptors.request.use(

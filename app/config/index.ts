@@ -19,14 +19,15 @@ const baseURLs = {
 
 const testModeEnabled = false; //true => show component in test screen
 const baseURL = baseURLs[REACT_APP_ENVIRONMENT];
-const httpTimeout = 30000; //timeout in ms
+const httpTimeout = 30 * 1000; //timeout in ms
 const enablePerformance = true; //enable log performance in seconds
 const enableReduxPersist = false; //true => enable REDUX persists
 const defaultTheme: keyof typeof colors = 'dark';
 const defaultLanguage: keyof typeof resources = 'ar';
 const httpProvider: HttpProvider = axiosProvider; //axios, apisauce...
+const clientCacheDuration = 3600 * 1000; //http client cache maxAge in milliseconds. 0 => no cache
 const appEnv = REACT_APP_ENVIRONMENT; //environment, used to condition cases to only work on dev
-const showConsoleLogs = true;
+const showLogs = true; //show console logs in app logger
 
 export default {
   testModeEnabled,
@@ -37,8 +38,7 @@ export default {
   httpProvider,
   baseURL,
   httpTimeout,
+  clientCacheDuration,
   appEnv,
-  showConsoleLogs,
+  showLogs,
 };
-
-export {baseURL, httpTimeout, httpProvider};

@@ -14,7 +14,7 @@ const customTransport: transportFunctionType = ({level, rawMsg}) => {
     return;
   }
 
-  const showLogs = AppConfig.showConsoleLogs;
+  const showLogs = AppConfig.showLogs;
   if (!showLogs) {
     return;
   }
