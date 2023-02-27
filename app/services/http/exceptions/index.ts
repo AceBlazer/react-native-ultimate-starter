@@ -9,3 +9,8 @@ export class SessionExpiredError extends Error {
     super('Session expired error');
   }
 }
+export class TimeoutError extends Error {
+  constructor() {
+    super('Request timed out');
+  }
+}

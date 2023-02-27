@@ -29,7 +29,6 @@ automatically include performance for "x" (exp. included in network elapsed time
 
 -----------todo--------------
 
--catch timeout errors by axios and raise custom error
 
 
 -new pattern: service dispatches a transaction to store => middleware gets transaction from store and dispatches to thunk

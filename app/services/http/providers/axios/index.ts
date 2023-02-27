@@ -105,22 +105,26 @@ function axiosProvider(): HttpProvider {
           params: args.headers?.params,
         });
 
-        if (res.data) {
-          return resolve(
-            handleRequestSuccess<T>(args, res.data.statusCode, res.data as T),
-          );
+        if (!res.data) {
+          reject('no data object in response');
         }
-        reject('no data object in response');
+        return resolve(
+          handleRequestSuccess<T>(args, res.data.statusCode, res.data as T),
+        );
       } catch (error: any) {
         //end
-        const resData = error?.data;
-        if (resData) {
+        const errorResponse = error?.data;
+        if (errorResponse) {
           reject(
-            await handleRequestError(args, resData.statusCode, resData.message),
+            await handleRequestError(
+              args,
+              errorResponse.statusCode,
+              errorResponse.message,
+            ),
           );
-        } else {
-          reject(error);
         }
+
+        reject(error);
       }
     });
   };

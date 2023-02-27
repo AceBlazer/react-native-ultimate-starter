@@ -92,10 +92,13 @@ const extractArgs = (args: Array<any>) => {
   const message = args[args.length - 2];
   const api = args[args.length - 1];
   let text = '|';
-  if (args.length > 1) {
-    args.pop();
-    text = args.join(' | ');
+
+  if (args.length > 2) {
+    text = args.slice(0, args.length - 2).join(' | ');
+  } else {
+    text = args.slice(0, args.length - 1).join(' | ');
   }
+
   return {text, message, api};
 };
 
@@ -127,17 +130,17 @@ export const appLogger = {
   error:
     (apiArg: string) =>
     (...args: Array<any>) =>
-      loggerInstance.error(extractArgs(args.concat(apiArg))),
+      loggerInstance.error(extractArgs.apply(this, [[...args, apiArg]])),
   debug:
     (apiArg: string) =>
     (...args: Array<any>) =>
-      loggerInstance.debug(extractArgs(args.concat(apiArg))),
+      loggerInstance.debug(extractArgs.apply(this, [[...args, apiArg]])),
   info:
     (apiArg: string) =>
     (...args: Array<any>) =>
-      loggerInstance.info(extractArgs(args.concat(apiArg))),
+      loggerInstance.info(extractArgs.apply(this, [[...args, apiArg]])),
   warn:
     (apiArg: string) =>
     (...args: Array<any>) =>
-      loggerInstance.warn(extractArgs(args.concat(apiArg))),
+      loggerInstance.warn(extractArgs.apply(this, [[...args, apiArg]])),
 };

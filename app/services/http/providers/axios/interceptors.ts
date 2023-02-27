@@ -1,13 +1,14 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {NetworkError} from '../../exceptions';
+import {NetworkError, TimeoutError} from '../../exceptions';
 import config from '../../../../config';
 import {LOGGER_LEVELS} from '../../../../config/logger';
 import {appLogger} from '../../../logger/logger.service';
 
 const axiosInstance = axios.create({
   baseURL: config.baseURL,
-  timeout: config.httpTimeout,
+  // timeout: config.httpTimeout,
+  timeout: 1,
 });
 
 axiosInstance.interceptors.request.use(
@@ -37,8 +38,15 @@ axiosInstance.interceptors.response.use(
     appLogger
       .api(LOGGER_LEVELS.AXIOS)
       .error('axios request ended with error', error.message, error);
+
+    if (
+      error.code === 'ECONNABORTED' &&
+      (error.message as string).includes('timeout')
+    ) {
+      throw new TimeoutError();
+    }
     if (!error.response) {
-      return Promise.reject(new NetworkError());
+      throw new NetworkError();
     }
     throw error.response;
   },
