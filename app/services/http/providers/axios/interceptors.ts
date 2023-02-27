@@ -1,25 +1,16 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {NetworkError} from '../exceptions';
-// import {baseURL, httpTimeout, clientCacheDuration} from '../../../config';
-import {LOGGER_LEVELS} from '../../../config/logger';
-import {appLogger} from '../../logger/logger.service';
-import {setupCache} from 'axios-cache-adapter';
-import config from '../../../config';
+import {NetworkError} from '../../exceptions';
+import config from '../../../../config';
+import {LOGGER_LEVELS} from '../../../../config/logger';
+import {appLogger} from '../../../logger/logger.service';
 
-console.log('clientCacheDuration', config.clientCacheDuration);
-
-// const cache = setupCache({
-//   maxAge: clientCacheDuration,
-// });
-
-const appAxios = axios.create({
-  // baseURL: baseURL,
-  // timeout: httpTimeout,
-  // adapter: clientCacheDuration ? cache.adapter : axios.defaults.adapter,
+const axiosInstance = axios.create({
+  baseURL: config.baseURL,
+  timeout: config.httpTimeout,
 });
 
-appAxios.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   async _config => {
     appLogger.api(LOGGER_LEVELS.AXIOS).info('axios request started', _config);
 
@@ -37,7 +28,7 @@ appAxios.interceptors.request.use(
   },
 );
 
-appAxios.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   response => {
     appLogger.api(LOGGER_LEVELS.AXIOS).info('axios request ended', response);
     return response;
@@ -79,6 +70,6 @@ const cancelHTTPRequest = () => {
     // appLogger.error('CancelHTTPRequest---------', error);
   }
 };
-appAxios.prototype.cancelHTTPRequest = cancelHTTPRequest;
+axiosInstance.prototype.cancelHTTPRequest = cancelHTTPRequest;
 
-export default appAxios;
+export default axiosInstance;

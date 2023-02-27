@@ -1,22 +1,16 @@
-// import {
-//    AxiosRequestConfig,
-// } from 'axios';
-import {NetworkError, SessionExpiredError} from '../exceptions';
+import {NetworkError, SessionExpiredError} from '../../exceptions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {isJwtExpired} from 'jwt-check-expiration';
-import {AxiosNetworkResponse} from '../../../types/axios.type';
-import {UserResponse} from '../../../types/auth.type';
-import {API} from '../../../constants/endpoints';
-import appAxios from './appAxios';
+import {AxiosNetworkResponse} from '../../../../types/axios.type';
+import {UserResponse} from '../../../../types/auth.type';
+import {API} from '../../../../constants/endpoints';
+import axiosInstance from './interceptors';
 import {
   HttpProvider,
   RequestArgs,
   StorageTokens,
-} from '../../../types/http.type';
-import {defaultStore} from '../../../store';
-// import {HttpProvider} from '../../../types/http.type';
-
-//TODO: use performance in start and end comments
+} from '../../../../types/http.type';
+import {defaultStore} from '../../../../store';
 
 function axiosProvider(): HttpProvider {
   const getAuthTokens = async (): Promise<StorageTokens> => {
@@ -32,7 +26,7 @@ function axiosProvider(): HttpProvider {
     response: AxiosNetworkResponse<UserResponse>,
   ) => {
     const userResponse = response.data.data;
-    appAxios.defaults.headers.Authorization =
+    axiosInstance.defaults.headers.Authorization =
       'Bearer ' + userResponse.authToken;
 
     // Set new s3 cloud front cookies
@@ -50,7 +44,7 @@ function axiosProvider(): HttpProvider {
 
       try {
         const refreshTokenResponse: AxiosNetworkResponse<UserResponse> =
-          await appAxios({
+          await axiosInstance({
             url: API.auth.refreshToken,
             method: 'POST',
             data: {refreshToken: authTokens.refreshToken},
@@ -104,7 +98,7 @@ function axiosProvider(): HttpProvider {
   const handleRequest = <T>(args: RequestArgs): Promise<T> => {
     return new Promise<T>(async (resolve, reject) => {
       try {
-        const res: AxiosNetworkResponse<T> = await appAxios({
+        const res: AxiosNetworkResponse<T> = await axiosInstance({
           url: args.url,
           method: args.method,
           data: args.body || null,

@@ -27,7 +27,7 @@ const customTransport: transportFunctionType = ({level, rawMsg}) => {
     '[' + logDate() + ']',
     rawMsg[0].text,
     rawMsg[0].message,
-    extra(rawMsg[0].text),
+    extra(rawMsg[0]),
   ];
 
   if (level.text === LOGGER_OPTIONS.ERROR) {
@@ -71,8 +71,9 @@ function logDate() {
   return display;
 }
 
-function extra(text = '') {
+function extra(rawMsg: {text: string; message: any; api: string}) {
   try {
+    const {text, api} = rawMsg;
     const {loginID} = connectedUser.getUserInfo();
 
     const elapsedTime = text.includes('ended')
@@ -81,20 +82,21 @@ function extra(text = '') {
         ).getDuration()}`
       : '';
 
-    return `| user: ${loginID} ${elapsedTime}`;
+    return `| api: ${api} | user: ${loginID} ${elapsedTime}`;
   } catch (error) {
     return '';
   }
 }
 
 const extractArgs = (args: Array<any>) => {
-  const message = args[args.length - 1];
+  const message = args[args.length - 2];
+  const api = args[args.length - 1];
   let text = '|';
   if (args.length > 1) {
     args.pop();
     text = args.join(' | ');
   }
-  return {text, message};
+  return {text, message, api};
 };
 
 const allowedLevel = (args: Array<any>) => {
@@ -116,14 +118,26 @@ export const appLogger = {
       };
     }
     return {
-      error: appLogger.error,
-      debug: appLogger.debug,
-      info: appLogger.info,
-      warn: appLogger.info,
+      error: appLogger.error(apiArg),
+      debug: appLogger.debug(apiArg),
+      info: appLogger.info(apiArg),
+      warn: appLogger.warn(apiArg),
     };
   },
-  error: (...args: Array<any>) => loggerInstance.error(extractArgs(args)),
-  debug: (...args: Array<any>) => loggerInstance.debug(extractArgs(args)),
-  info: (...args: Array<any>) => loggerInstance.info(extractArgs(args)),
-  warn: (...args: Array<any>) => loggerInstance.warn(extractArgs(args)),
+  error:
+    (apiArg: string) =>
+    (...args: Array<any>) =>
+      loggerInstance.error(extractArgs(args.concat(apiArg))),
+  debug:
+    (apiArg: string) =>
+    (...args: Array<any>) =>
+      loggerInstance.debug(extractArgs(args.concat(apiArg))),
+  info:
+    (apiArg: string) =>
+    (...args: Array<any>) =>
+      loggerInstance.info(extractArgs(args.concat(apiArg))),
+  warn:
+    (apiArg: string) =>
+    (...args: Array<any>) =>
+      loggerInstance.warn(extractArgs(args.concat(apiArg))),
 };

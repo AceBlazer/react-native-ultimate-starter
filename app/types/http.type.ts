@@ -21,3 +21,10 @@ export type StorageTokens = {
   token: string | null;
   refreshToken: string | null;
 };
+
+export enum HttpProviderOptions {
+  AXIOS = 'axios',
+  APISAUCE = 'apisauce',
+}
+
+export type HttpProviders = {[key in HttpProviderOptions]: HttpProvider | null};
