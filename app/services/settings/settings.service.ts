@@ -1,3 +1,4 @@
+import {API} from '../../constants/endpoints';
 import {defaultStore} from '../../store';
 import {fetchData} from '../../store/thunks/fetch.thunk';
 import {RequestArgs} from '../../types/http.type';
@@ -9,6 +10,7 @@ const settingsService = {
     const params: RequestArgs = {
       method: 'GET',
       url: 'https://jsonplaceholder.typicode.com/todos',
+      // url: API.auth.login,
     };
     defaultStore.store.dispatch(fetchPostsData(params));
   },

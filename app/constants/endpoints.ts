@@ -12,6 +12,7 @@
 
 const authAPI = {
   baseEndpoint: '/auth',
+  login: '/auth/login',
   refreshToken: '/auth/refresh-token',
 };
 

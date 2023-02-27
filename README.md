@@ -29,14 +29,12 @@ automatically include performance for "x" (exp. included in network elapsed time
 
 -----------todo--------------
 
-
+***add cli
 
 -new pattern: service dispatches a transaction to store => middleware gets transaction from store and dispatches to thunk
 -logger should be implicit (if all gonna be passing by transaction reducer, we add logger there)
 -performance should be implicit (inside transaction)
 
-
--add cli
 
 -(if still have time) maybe add auth classic vs saml and 2fa and biometric validation (see nicehash) 
 

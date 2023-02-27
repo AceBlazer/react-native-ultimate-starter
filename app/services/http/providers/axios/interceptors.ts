@@ -7,8 +7,7 @@ import {appLogger} from '../../../logger/logger.service';
 
 const axiosInstance = axios.create({
   baseURL: config.baseURL,
-  // timeout: config.httpTimeout,
-  timeout: 1,
+  timeout: config.httpTimeout,
 });
 
 axiosInstance.interceptors.request.use(
