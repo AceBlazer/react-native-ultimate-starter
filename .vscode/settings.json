@@ -8,6 +8,7 @@
         "JASSER",
         "Middlewares",
         "persistor",
+        "reduxjs",
         "sourcemaps",
         "undoable"
     ],
