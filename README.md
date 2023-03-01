@@ -2,7 +2,14 @@ this project can be initiated by ace-rn CLI (link)
 
 * pattern:
 call service from ui => service calls thunk and updates store (no return: no side effects,
-one source of truth: store) => ui uses selector (middlewares work in between)
+one source of truth: store) => ui uses selector (middlewares work in between) [deprecated]
+
+* new pattern: ui calls service => service dispatches a transaction to store =>
+middleware gets transaction from store and dispatches to thunk => thunk sends request
+and updates store => middleware removes transaction from store => ui uses selector
+//figure
+* benefits of this pattern:
+//todo
 
 * done:
 - testable components / screens + clean architecture (ts, BaseView, combine providers)
@@ -31,8 +38,10 @@ automatically include performance for "x" (exp. included in network elapsed time
 
 -----------todo--------------
 
--new pattern: service dispatches a transaction to store => middleware gets transaction from store and dispatches to thunk
 -logger should be implicit (if all gonna be passing by transaction reducer, we add logger there)
 -performance should be implicit also (inside transaction)
+
+
+
 
 

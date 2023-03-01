@@ -1,18 +1,24 @@
-import {API} from '../../constants/endpoints';
 import {defaultStore} from '../../store';
-import {fetchData} from '../../store/thunks/fetch.thunk';
-import {RequestArgs} from '../../types/http.type';
-import {PostsResponse} from '../../types/settings.type';
+import {updateTransaction} from '../../store/slices/actions/transaction.actions';
+import {TransactionState} from '../../store/slices/reducers/transaction.reducer';
+import uuid from 'react-native-uuid';
+
+const getBaseTransactionDispatchPayload = (): TransactionState => {
+  return {
+    id: uuid.v4() as string,
+    timestamp: Date.now(),
+    payload: {},
+  };
+};
 
 const settingsService = {
   fetchPosts: () => {
-    const fetchPostsData = fetchData<PostsResponse>();
-    const params: RequestArgs = {
-      method: 'GET',
-      url: 'https://jsonplaceholder.typicode.com/todos',
-      // url: API.auth.login,
+    const transactionPayload = {};
+    const transactionDispatchPayload = {
+      ...getBaseTransactionDispatchPayload(),
+      payload: transactionPayload,
     };
-    defaultStore.store.dispatch(fetchPostsData(params));
+    defaultStore.store.dispatch(updateTransaction(transactionDispatchPayload));
   },
 };
 

@@ -27,7 +27,7 @@ const redoSettings = () => {
 
 const resetSettings = () => {
   return {
-    type: reset,
+    type: reset.type,
   };
 };
 
