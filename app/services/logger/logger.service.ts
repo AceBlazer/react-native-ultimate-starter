@@ -30,6 +30,8 @@ const customTransport: transportFunctionType = ({level, rawMsg}) => {
     extra(rawMsg[0]),
   ];
 
+  console.log('toBeLogged =========> ', rawMsg[0]);
+
   if (level.text === LOGGER_OPTIONS.ERROR) {
     console.error(...toBeLogged);
   } else if (level.text === LOGGER_OPTIONS.WARN) {
@@ -89,7 +91,7 @@ function extra(rawMsg: {text: string; message: any; api: string}) {
 }
 
 const extractArgs = (args: Array<any>) => {
-  const message = args[args.length - 2];
+  let message = args[args.length - 2];
   const api = args[args.length - 1];
   let text = '|';
 
@@ -97,6 +99,10 @@ const extractArgs = (args: Array<any>) => {
     text = args.slice(0, args.length - 2).join(' | ');
   } else {
     text = args.slice(0, args.length - 1).join(' | ');
+  }
+
+  if (text === message) {
+    message = '';
   }
 
   return {text, message, api};

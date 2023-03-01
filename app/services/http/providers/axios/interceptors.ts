@@ -30,7 +30,9 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   response => {
-    appLogger.api(LOGGER_LEVELS.AXIOS).info('axios request ended', response);
+    appLogger
+      .api(LOGGER_LEVELS.AXIOS)
+      .info('axios request ended successfully', response);
     return response;
   },
   async error => {

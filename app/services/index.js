@@ -6,6 +6,7 @@ const services = {
   settings,
   appLogger,
   axios,
+  transaction: 'transaction',
 };
 
 export default services;

@@ -57,5 +57,6 @@ export function getIfLogAllowed(name: string) {
 export const LEVEL = [
   LOGGER_LEVELS.SETTINGS,
   LOGGER_LEVELS.AXIOS,
+  LOGGER_LEVELS.TRANSACTION,
   // '*', to allow all levels
 ];

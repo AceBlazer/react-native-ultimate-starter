@@ -1,10 +1,14 @@
 import {PayloadAction} from '@reduxjs/toolkit';
+import {LOGGER_LEVELS} from '../../../config/logger';
+import services from '../../../services';
+import {appLogger} from '../../../services/logger/logger.service';
 
 export type TransactionPayload = {};
 
 export type TransactionState = {
   id: string;
   timestamp: number;
+  service: keyof typeof services;
   payload: TransactionPayload;
 };
 
@@ -17,10 +21,14 @@ const transaction = {
       state: TransactionState,
       action: PayloadAction<TransactionState>,
     ) => {
+      appLogger
+        .api(LOGGER_LEVELS.TRANSACTION)
+        .info('adding transaction', action.payload);
       return action.payload;
     },
 
     reset: () => {
+      appLogger.api(LOGGER_LEVELS.TRANSACTION).info('resetting transaction');
       return initialState;
     },
   },

@@ -7,6 +7,8 @@ one source of truth: store) => ui uses selector (middlewares work in between) [d
 * new pattern: ui calls service => service dispatches a transaction to store =>
 middleware gets transaction from store and dispatches to thunk => thunk sends request
 and updates store => middleware removes transaction from store => ui uses selector
+logger implicit (if all gonna be passing by transaction reducer, we add logger there)
+performance implicit also (inside transaction)
 //figure
 * benefits of this pattern:
 //todo
@@ -38,8 +40,8 @@ automatically include performance for "x" (exp. included in network elapsed time
 
 -----------todo--------------
 
--logger should be implicit (if all gonna be passing by transaction reducer, we add logger there)
--performance should be implicit also (inside transaction)
+
+update this
 
 
 
