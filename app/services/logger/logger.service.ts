@@ -30,8 +30,6 @@ const customTransport: transportFunctionType = ({level, rawMsg}) => {
     extra(rawMsg[0]),
   ];
 
-  console.log('toBeLogged =========> ', rawMsg[0]);
-
   if (level.text === LOGGER_OPTIONS.ERROR) {
     console.error(...toBeLogged);
   } else if (level.text === LOGGER_OPTIONS.WARN) {
