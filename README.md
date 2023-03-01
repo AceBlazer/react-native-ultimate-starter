@@ -1,3 +1,5 @@
+this project can be initiated by ace-rn CLI (link)
+
 * pattern:
 call service from ui => service calls thunk and updates store (no return: no side effects,
 one source of truth: store) => ui uses selector (middlewares work in between)
@@ -29,15 +31,8 @@ automatically include performance for "x" (exp. included in network elapsed time
 
 -----------todo--------------
 
-***add cli
-
 -new pattern: service dispatches a transaction to store => middleware gets transaction from store and dispatches to thunk
 -logger should be implicit (if all gonna be passing by transaction reducer, we add logger there)
--performance should be implicit (inside transaction)
+-performance should be implicit also (inside transaction)
 
 
--(if still have time) maybe add auth classic vs saml and 2fa and biometric validation (see nicehash) 
-
-----------to learn------------
-react router dom v6
-oauth2 vs saml
