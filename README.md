@@ -38,10 +38,14 @@ should be always the singleton)
 - performance: implicit: inside logger with a reference to message, should write logs "x started ..." and "x ended ..." will
 automatically include performance for "x" (exp. included in network elapsed time) 
 
------------todo--------------
+
+//todo: project arch
 
 
-update this
+----------todo----------
+change project name dynamically
+
+
 
 
 

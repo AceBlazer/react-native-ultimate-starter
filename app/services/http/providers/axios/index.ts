@@ -131,7 +131,10 @@ function axiosProvider(): HttpProvider {
 
   const sendHttpRequest = <T>(args: RequestArgs): Promise<T> => {
     const callerName = new Error().stack?.split('\n')[2].trim().split(' ')[1];
-    if (callerName !== 'HttpService.sendRequest') {
+    if (
+      callerName !== 'anonymous' &&
+      callerName !== 'HttpService.sendRequest'
+    ) {
       throw new Error(
         'unauthorized caller, sendHttpRequest should be only called from HttpService',
       );

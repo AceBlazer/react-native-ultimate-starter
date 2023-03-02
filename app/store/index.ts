@@ -49,7 +49,7 @@ type StoreConfig = {
   _getMiddlewaresArray: Function;
 };
 
-const configurePosteStore = ({
+const configureAppStore = ({
   slices,
   reducer,
   _configureStore,
@@ -114,7 +114,7 @@ const createStore = () => {
     _getMiddlewaresArray: getMiddlewaresArray,
   };
 
-  const {store, persistor} = configurePosteStore(storeConfig);
+  const {store, persistor} = configureAppStore(storeConfig);
   store.slices = slices;
   store.persistor = persistor;
 

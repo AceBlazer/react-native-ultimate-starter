@@ -63,3 +63,8 @@ yarn-error.log
 .metro-health-check*
 
 .env
+
+
+#sentry properties
+/ios/sentry.properties
+/android/sentry.properties

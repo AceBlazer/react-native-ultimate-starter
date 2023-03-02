@@ -6,7 +6,7 @@ export class HttpService implements IHttpService {
   // DI
   public setProvider(provider: HttpProvider): void {
     const callerName = new Error().stack?.split('\n')[2].trim().split(' ')[1];
-    if (callerName !== 'httpInstance') {
+    if (callerName !== 'anonymous' && callerName !== 'httpInstance') {
       throw new Error(
         'unauthorized caller, setProvider should be only called from httpInstance',
       );
