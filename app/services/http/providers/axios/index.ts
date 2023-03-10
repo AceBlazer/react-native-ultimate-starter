@@ -1,7 +1,10 @@
 import {NetworkError, SessionExpiredError} from '../../exceptions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {isJwtExpired} from 'jwt-check-expiration';
-import {AxiosNetworkResponse} from '../../../../types/axios.type';
+import {
+  AxiosNetworkResponse,
+  ResponseError,
+} from '../../../../types/axios.type';
 import {UserResponse} from '../../../../types/auth.type';
 import {API} from '../../../../constants/endpoints';
 import axiosInstance from './interceptors';
@@ -73,7 +76,7 @@ function axiosProvider(): HttpProvider {
 
   const handleRequestError = async (
     reqArgs: RequestArgs,
-    statusCode: number,
+    statusCode?: number,
     message?: string,
   ) => {
     // Logger.error(
@@ -111,14 +114,14 @@ function axiosProvider(): HttpProvider {
         return resolve(
           handleRequestSuccess<T>(args, res.data.statusCode, res.data as T),
         );
-      } catch (error: any) {
+      } catch (error) {
         //end
-        const errorResponse = error?.data;
+        const errorResponse = (error as ResponseError)?.data;
         if (errorResponse) {
           reject(
             await handleRequestError(
               args,
-              errorResponse.statusCode,
+              errorResponse?.statusCode,
               errorResponse.message,
             ),
           );

@@ -36,10 +36,12 @@ export const fetchData = <R>(): AsyncThunk<
 
         const responseData = await httpInstance.sendRequest<R>(args);
         return responseData;
-      } catch (error: any) {
-        return rejectWithValue(
-          error?.message ?? 'fetchData thunk unknown error',
-        );
+      } catch (error) {
+        if (error instanceof Error && error.message) {
+          return rejectWithValue(error.message);
+        }
+
+        return rejectWithValue('fetchData thunk unknown error');
       }
     },
   );

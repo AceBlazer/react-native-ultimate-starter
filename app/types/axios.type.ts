@@ -9,3 +9,5 @@ export type AxiosType<T> = {
 
 export type AxiosNetworkResponse<T> = AxiosResponse<AxiosType<T>>;
 export type AxiosPromiseNetworkResponse<T> = Promise<AxiosNetworkResponse<T>>;
+
+export type ResponseError = {data: Partial<AxiosType<object>>};
