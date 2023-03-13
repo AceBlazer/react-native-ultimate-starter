@@ -42,7 +42,8 @@ axiosInstance.interceptors.response.use(
 
     if (
       error.code === 'ECONNABORTED' &&
-      (error.message as string).includes('timeout')
+      axios.isAxiosError(error) &&
+      error.message.includes('timeout')
     ) {
       throw new TimeoutError();
     }
